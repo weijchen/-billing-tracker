@@ -2,7 +2,6 @@
 '''
 Author: Jimmy Chen
 PN: Billing Tracker, Created Dec. 2017
-Ver: 1.2 (finish delete modules)
 Link:
 Todo: 
 ''' 
@@ -12,7 +11,6 @@ import sqlite3
 import time, datetime
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
-
 import pandas as pd
 from income import *
 from expense import *
@@ -24,11 +22,16 @@ class Delete(object):
     def __init__(self, arg):
         super(Delete, self).__init__()
         self.arg = arg
+    def adjust(conn, title, amount):
+        cur = conn.cursor()
+
+
     def run(conn, id, curMonth, nextMonth, table):
         cur = conn.cursor()
         sqlstr = "SELECT * FROM {1} WHERE (id == {0})".format(id, table)
         cur.execute(sqlstr)
         var = cur.fetchall()
+        print(var)
         if len(var) == 0:
             print("No item {}!".format(id))
         else:
