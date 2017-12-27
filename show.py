@@ -2,7 +2,6 @@
 '''
 Author: Jimmy Chen
 PN: Billing Tracker, Created Dec. 2017
-Ver: 1.1 (finish show modules)
 Link:
 Todo: 
 ''' 

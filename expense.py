@@ -2,7 +2,6 @@
 '''
 Author: Jimmy Chen
 PN: Billing Tracker, Created Dec. 2017
-Ver: 1.1 (finish expense modules)
 Link:
 Todo: 
 ''' 
@@ -10,10 +9,12 @@ Todo:
 import sqlite3
 import time, datetime
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 import pandas as pd
 from income import *
 from show import *
 from account import *
+from delete import *
 # --------------------------------------------------- init settings
 # --------------------------------------------------- Functions
 class Exp(object):
@@ -21,6 +22,65 @@ class Exp(object):
     def __init__(self, arg):
         super(Exp, self).__init__()
         self.arg = arg
+    def delete(conn):
+        Exp.show()
+        check = int(input("Choose function: "))
+        if check == 1:
+            cMonth, nMonth = Delete.month_init()
+            end = True
+            while end == True:
+                Delete.show_income(conn, check, cMonth, nMonth, 'expense')
+                print("--------------------------------------------------------------------------------------")
+                print("1. Prev")
+                print("2. Back")
+                print("3. Delete")
+                print("4. Quit")
+                choose = int(input("Choose function: "))
+                if choose == 1:
+                    nMonth = cMonth
+                    cMonth -= relativedelta(months=1)
+                elif choose == 2:
+                    cMonth = nMonth
+                    nMonth += relativedelta(months=1)
+                elif choose == 3:
+                    id_ = int(input("Delete item(id): "))
+                    Delete.run(conn, id_, cMonth, nMonth, 'expense')
+                    end = False
+                elif choose == 4:
+                    end = False
+                else:
+                    print("Input error")
+        elif check == 2:
+            cyear = int(input("Which year: "))
+            nyear = cyear
+            cmonth = int(input("Which month: "))
+            nmonth = cmonth + 1
+            if nmonth > 12:
+                nyear += 1
+                nmonth = 1
+            cMonth = str(cyear)+'-'+str(cmonth)
+            nMonth = str(nyear)+'-'+str(nmonth)
+            Delete.show_income(conn, check, cMonth, nMonth, 'expense')
+            print("--------------------------------------------------------------------------------------")
+            print("1. Delete")
+            print("2. Quit")
+            choose = int(input("Choose function: "))
+            if choose == 1:
+                id_ = int(input("Delete item(id): "))
+                Delete.run(conn, id_, cMonth, nMonth, 'expense')
+                end = False
+            elif choose == 2:
+                end = False
+            else:
+                print("Input error")
+    def show():
+        print("-------------------")
+        print("   Delete -> Expense  ")
+        print("-------------------")
+        print("1. Monthly")
+        print("2. Specific month")
+        print("0. End")
+        print("-------------------")
     def enter(conn):
         deal = []
         Show.account(conn)
@@ -43,7 +103,7 @@ class Exp(object):
             details = str(input("Details: ") or "None")
             invoice = str(input("Invoice: ") or "None")
             sqlstr_inc_ent = ("INSERT OR IGNORE INTO expense (id, date, time, amount, account, main, sub, details, invoice) VALUES (?,?,?,?,?,?,?,?,?)")
-            deal.append((id_, date_, time_, amount, account, main, sub, details, invoice))
+            deal.append((id_, date_, time_[0:8], amount, account, main, sub, details, invoice))
             conn.executemany(sqlstr_inc_ent, deal)
             conn.commit()
             Acc.adjust(acc, conn, 'expense', amount)

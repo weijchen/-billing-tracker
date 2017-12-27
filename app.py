@@ -2,7 +2,7 @@
 '''
 Author: Jimmy Chen
 PN: Billing Tracker, Created Dec. 2017
-Ver: 1.2 (finish income, expense, show modules)
+Ver: 1.3 (finish delete modules)
 Link:
 Todo: 
 ''' 
@@ -154,11 +154,11 @@ if __name__ == '__main__':
                     break
                 # -- 3-1. Delete income --
                 elif choice == 1:
-                    pass
+                    Inc.delete(conn)
                     # Delete.income()
                 # -- 3-2. Delete expense --
                 elif choice == 2:
-                    pass
+                    Exp.delete(conn)
         # -- 4. Show data --
         elif choice == 4:
             while True:
