@@ -38,7 +38,7 @@ class Modify(object):
             print("4. Category")
             print("5. Details")
             print("6. Invoice")
-            print("7. Make the change!")
+            print("0. Make the change!")
             choose = int(input("Modify which column: "))
             if choose == 1:
                 date_, time_ = sp.Tools.get_time('N')
@@ -73,7 +73,7 @@ class Modify(object):
             elif choose == 6:
                 invoice = str(input("Invoice: ") or "None")
                 var[8] = invoice
-            elif choose == 7:
+            elif choose == 0:
                 var[0] = sp.Tools.get_id(var[4], table, conn)
                 var[3] = int(var[3])
                 deal = []

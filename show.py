@@ -28,6 +28,7 @@ class Show(object):
         var = cur.fetchall()
         if len(var) == 0:
             print("No account created!")
+            print("")
             input("Press Enter to continue ...")
         else:
             print("===== Account list =====")
@@ -45,6 +46,8 @@ class Show(object):
             var = cur.fetchall()
             if len(var) == 0:
                 print("No account created!")
+                print("")
+                input("Press Enter to continue ...")
             else:
                 print("--------------------------------------------------------------------------------------")
                 print("ID | Date | Time | Amount | Account | Main Category | Sub Category | Details | Invoice")
@@ -52,7 +55,7 @@ class Show(object):
                 for idx in range(len(var)):
                     for i in range(len(var[idx])):
                         print(var[idx][i], end=' | ')
-                    print("")
+                print("")
         elif check == 2:
             cur = conn.cursor()
             sqlstr = ("SELECT * FROM {2} WHERE (date >= '{0}' and date< '{1}') ORDER BY date ASC, time ASC;".format(curMonth, nextMonth, table))
@@ -60,6 +63,8 @@ class Show(object):
             var = cur.fetchall()
             if len(var) == 0:
                 print("No account created!")
+                print("")
+                input("Press Enter to continue ...")
             else:
                 print("--------------------------------------------------------------------------------------")
                 print("ID | Date | Time | Amount | Account | Main Category | Sub Category | Details | Invoice")
@@ -67,7 +72,7 @@ class Show(object):
                 for idx in range(len(var)):
                     for i in range(len(var[idx])):
                         print(var[idx][i], end=' | ')
-                    print("")
+                print("")
     def income(conn, check):
         if check == 1:
             date_ = str(datetime.datetime.now()).split(" ")[0]
@@ -77,6 +82,8 @@ class Show(object):
             var = cur.fetchall()
             if len(var) == 0:
                 print("No account created!")
+                print("")
+                input("Press Enter to continue ...")
             else:
                 print("===== Income list =====")
                 print("--------------------------------------------------------------------------------------")
@@ -85,7 +92,7 @@ class Show(object):
                 for idx in range(len(var)):
                     for i in range(len(var[idx])):
                         print(var[idx][i], end=' | ')
-                    print("")
+                print("")
             input("Press Enter to continue ...")
             print("")
         elif check == 2:

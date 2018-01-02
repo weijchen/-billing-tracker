@@ -119,24 +119,6 @@ if __name__ == '__main__':
                 elif choice == 3:
                     Acc.enter(conn)
                     input("Press Enter to continue ...")
-        # # -- 2. Modify data --
-        # elif choice == 2:
-        #     while True:
-        #         Display.change()
-        #         choice = int(input("Choose function: "))
-        #         # print("-----------------------------------------")
-        #         # -- 2-0. Exit program --
-        #         if choice == 0:
-        #             break
-        #         # -- 2-1. Modify income --
-        #         elif choice == 1:
-        #             Inc.change(conn)
-        #         # -- 2-2. Modify expense --
-        #         elif choice == 2:
-        #             Mod.run(conn)
-        #         # -- 2-3. Modify account --
-        #         elif choice == 3:
-        #             Mod.run(conn)
         # -- 2. Change data --
         elif choice == 2:
             while True:
@@ -146,16 +128,18 @@ if __name__ == '__main__':
                 # -- 3-0. Exit program --
                 if choice == 0:
                     break
-                # -- 3-1. Delete income --
+                # -- 3-1. Change income --
                 elif choice == 1:
                     Inc.change(conn)
-                    # Delete.income()
-                # -- 3-2. Delete expense --
+                    input("Press Enter to continue ...")
+                # -- 3-2. Change expense --
                 elif choice == 2:
                     Exp.change(conn)
-                # -- 3-3. Delete account --
+                    input("Press Enter to continue ...")
+                # -- 3-3. Change account --
                 elif choice == 3:
                     Acc.change(conn)
+                    input("Press Enter to continue ...")
         # -- 3. Show data --
         elif choice == 3:
             while True:
@@ -187,12 +171,14 @@ if __name__ == '__main__':
                 conn.commit()
             except Exception as e:
                 print(e)
+            print('-- Table created --')
             try:
                 sqlstr_inc = 'CREATE TABLE income (id TEXT UNIQUE, date DATETIME, time DATETIME, amount NUMERIC, account TEXT, main TEXT, sub TEXT, details TEXT, invoice TEXT)'
                 conn.execute(sqlstr_inc)
                 conn.commit()
             except Exception as e:
                 print(e)
+            print('-- Table created --')
             try:
                 sqlstr_acc = 'CREATE TABLE account (id TEXT UNIQUE, date DATETIME, time DATETIME, title TEXT, initial NUMERIC, amount NUMERIC, details TEXT)'
                 conn.execute(sqlstr_acc)

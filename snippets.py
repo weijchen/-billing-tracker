@@ -43,7 +43,6 @@ class Tools(object):
             cur.execute(sqlstr)
             var = cur.fetchall()
             if len(var) == 0:
-                print(id_)
                 return id_
             else:
                 id_ += 1
