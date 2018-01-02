@@ -2,7 +2,7 @@
 '''
 Author: Jimmy Chen
 PN: Billing Tracker, Created Dec. 2017
-Ver: 1.3 (finish delete modules)
+Ver: 1.4 (finish modify modules)
 Link:
 Todo: 
 ''' 
@@ -14,15 +14,18 @@ import pandas as pd
 from income import *
 from expense import *
 from show import *
+from account import *
+from snippets import *
+from modify import *
 # --------------------------------------------------- init settings
 # --------------------------------------------------- Functions
-class Modify(object):
-    """docstring for Modify"""
-    def __init__(self, arg):
-        super(Modify, self).__init__()
-        self.arg = arg
-    def income():
-        cur = conn.cursor()
+# class Modify(object):
+#     """docstring for Modify"""
+#     def __init__(self, arg):
+#         super(Modify, self).__init__()
+#         self.arg = arg
+#     def income():
+#         cur = conn.cursor()
         
 class Display(object):
     """docstring for Display"""
@@ -34,10 +37,9 @@ class Display(object):
         print("| Save more Money!|")
         print("-------------------")
         print("1. Enter data")
-        print("2. Modify data")
-        print("3. Delete data")
-        print("4. Show data")
-        print("5. Create table")
+        print("2. Change data")
+        print("3. Show data")
+        print("4. Create table")
         print("0. End")
         print("-------------------")
     def enter():
@@ -47,15 +49,6 @@ class Display(object):
         print("1. Enter income")
         print("2. Enter expense")
         print("3. Enter account")
-        print("0. End")
-        print("-------------------")
-    def modify():
-        print("-------------------")
-        print("Main -> Modify data")
-        print("-------------------")
-        print("1. Modify income")
-        print("2. Modify expense")
-        print("3. Modify account")
         print("0. End")
         print("-------------------")
     def show():
@@ -85,12 +78,13 @@ class Display(object):
         print("3. All")
         print("0. End")
         print("-------------------")
-    def delete():
+    def change():
         print("-------------------")
-        print("   Main -> Delete  ")
+        print("   Main -> Change  ")
         print("-------------------")
-        print("1. Delete income")
-        print("2. Delete expense")
+        print("1. Change income")
+        print("2. Change expense")
+        print("3. Change account")
         print("0. End")
         print("-------------------")
 # --------------------------------------------------- Control center
@@ -125,28 +119,28 @@ if __name__ == '__main__':
                 elif choice == 3:
                     Acc.enter(conn)
                     input("Press Enter to continue ...")
-        # -- 2. Modify data --
+        # # -- 2. Modify data --
+        # elif choice == 2:
+        #     while True:
+        #         Display.change()
+        #         choice = int(input("Choose function: "))
+        #         # print("-----------------------------------------")
+        #         # -- 2-0. Exit program --
+        #         if choice == 0:
+        #             break
+        #         # -- 2-1. Modify income --
+        #         elif choice == 1:
+        #             Inc.change(conn)
+        #         # -- 2-2. Modify expense --
+        #         elif choice == 2:
+        #             Mod.run(conn)
+        #         # -- 2-3. Modify account --
+        #         elif choice == 3:
+        #             Mod.run(conn)
+        # -- 2. Change data --
         elif choice == 2:
             while True:
-                Display.modify()
-                choice = int(input("Choose function: "))
-                # print("-----------------------------------------")
-                # -- 2-0. Exit program --
-                if choice == 0:
-                    break
-                # -- 2-1. Modify income --
-                elif choice == 1:
-                    Show.mod()
-                # -- 2-2. Modify expense --
-                elif choice == 2:
-                    Show.mod()
-                # -- 2-3. Modify account --
-                elif choice == 3:
-                    Show.mod()
-        # -- 3. Delete data --
-        elif choice == 3:
-            while True:
-                Display.delete()
+                Display.change()
                 choice = int(input("Choose function: "))
                 # print("-----------------------------------------")
                 # -- 3-0. Exit program --
@@ -154,13 +148,16 @@ if __name__ == '__main__':
                     break
                 # -- 3-1. Delete income --
                 elif choice == 1:
-                    Inc.delete(conn)
+                    Inc.change(conn)
                     # Delete.income()
                 # -- 3-2. Delete expense --
                 elif choice == 2:
-                    Exp.delete(conn)
-        # -- 4. Show data --
-        elif choice == 4:
+                    Exp.change(conn)
+                # -- 3-3. Delete account --
+                elif choice == 3:
+                    Acc.change(conn)
+        # -- 3. Show data --
+        elif choice == 3:
             while True:
                 Display.show()
                 choice = int(input("Choose function: "))
@@ -182,8 +179,8 @@ if __name__ == '__main__':
                 elif choice == 3:
                     Show.account(conn)
                     input("Press Enter to continue ...")
-        # -- 5. Create table --
-        elif choice == 5:
+        # -- 4. Create table --
+        elif choice == 4:
             try:
                 sqlstr_exp = "CREATE TABLE expense (id TEXT UNIQUE, date TEXT, time DATETIME, amount NUMERIC, account TEXT, main TEXT, sub TEXT, details TEXT, invoice TEXT)"
                 conn.execute(sqlstr_exp)

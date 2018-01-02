@@ -22,16 +22,34 @@ class Delete(object):
     def __init__(self, arg):
         super(Delete, self).__init__()
         self.arg = arg
-    def adjust(conn, title, amount):
+    def reverse(conn, cat, title, amount):
         cur = conn.cursor()
-
-
+        sqlstr = "SELECT amount FROM account WHERE title == '{0}'".format(title)
+        cur.execute(sqlstr)
+        try:
+            var = cur.fetchone()
+            if cat == 'income':
+                adj = var[0] - amount
+                sqlstr_update = "UPDATE account SET amount = {0} WHERE title == '{1}';".format(adj, title)
+                cur.execute(sqlstr_update)
+                conn.commit()
+            elif cat == 'expense':
+                adj = var[0] + amount
+                sqlstr_update = "UPDATE account SET amount = {0} WHERE title == '{1}';".format(adj, title)
+                cur.execute(sqlstr_update)
+                conn.commit()
+            else:
+                print("Error input!")
+                return 0
+        except:
+            return False
     def run(conn, id, curMonth, nextMonth, table):
         cur = conn.cursor()
-        sqlstr = "SELECT * FROM {1} WHERE (id == {0})".format(id, table)
+        sqlstr = "SELECT * FROM {1} WHERE id == {0}".format(id, table)
         cur.execute(sqlstr)
         var = cur.fetchall()
-        print(var)
+        title_, amount_ = var[0][4], var[0][3]
+        Delete.reverse(conn, table, title_, amount_)
         if len(var) == 0:
             print("No item {}!".format(id))
         else:
@@ -39,43 +57,3 @@ class Delete(object):
             cur.execute(sqlstr)
             print("Item {} is delete!".format(id))
         conn.commit()
-    def month_init():
-        date_after_month = datetime.datetime.now() + relativedelta(months=1)
-        date_ = datetime.datetime.now()
-        dam = date_after_month
-        return date_, dam
-    def show_income(conn, check, curMonth, nextMonth, table):
-        curMonth = str(curMonth).split(" ")[0][0:7]
-        nextMonth = str(nextMonth).split(" ")[0][0:7]
-        if check == 1:
-            cur = conn.cursor()
-            sqlstr = ("SELECT * FROM {2} WHERE (date >= '{0}' and date< '{1}') ORDER BY date ASC, time ASC;".format(curMonth, nextMonth, table))
-            cur.execute(sqlstr)
-            var = cur.fetchall()
-            if len(var) == 0:
-                print("No account created!")
-            else:
-                print("===== {1} list (Month: {0}) =====".format(curMonth, table.capitalize()))
-                print("--------------------------------------------------------------------------------------")
-                print("ID | Date | Time | Amount | Account | Main Category | Sub Category | Details | Invoice")
-                print("--------------------------------------------------------------------------------------")
-                for idx in range(len(var)):
-                    for i in range(len(var[idx])):
-                        print(var[idx][i], end=' | ')
-                    print("")
-        elif check == 2:
-            cur = conn.cursor()
-            sqlstr = ("SELECT * FROM {2} WHERE (date >= '{0}' and date< '{1}') ORDER BY date ASC, time ASC;".format(curMonth, nextMonth, table))
-            cur.execute(sqlstr)
-            var = cur.fetchall()
-            if len(var) == 0:
-                print("No account created!")
-            else:
-                print("===== {1} list (Month: {0}) =====".format(curMonth, table.capitalize()))
-                print("--------------------------------------------------------------------------------------")
-                print("ID | Date | Time | Amount | Account | Main Category | Sub Category | Details | Invoice")
-                print("--------------------------------------------------------------------------------------")
-                for idx in range(len(var)):
-                    for i in range(len(var[idx])):
-                        print(var[idx][i], end=' | ')
-                    print("")
