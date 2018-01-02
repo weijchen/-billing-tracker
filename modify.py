@@ -24,6 +24,81 @@ class Modify(object):
     def __init__(self, arg):
         super(Mod, self).__init__()
         self.arg = arg
+    def main(conn, table):
+        print("-------------------")
+        print("  Change -> {} ".format(table.capitalize()))
+        print("-------------------")
+        print("1. Monthly")
+        print("2. Specific month")
+        print("0. End")
+        print("-------------------")
+        check = int(input("Choose function: "))
+        if check == 1:
+            cMonth, nMonth = Show.month_init()
+            end = True
+            while end == True:
+                print("===== {1} list (Month: {0}) =====".format(str(cMonth)[0:7], table.capitalize()))
+                Show.ch_monthly(conn, check, cMonth, nMonth, table)
+                print("--------------------------------------------------------------------------------------")
+                print("1. Prev")
+                print("2. Back")
+                print("3. Modify")
+                print("4. Delete")
+                print("5. Quit")
+                choose = int(input("Choose function: "))
+                if choose == 1:
+                    nMonth = cMonth
+                    cMonth -= relativedelta(months=1)
+                elif choose == 2:
+                    cMonth = nMonth
+                    nMonth += relativedelta(months=1)
+                elif choose == 3:
+                    id_ = int(input("Modify item(id): "))
+                    Modify.run(conn, id_, cMonth, nMonth, table)
+                elif choose == 4:
+                    id_ = int(input("Delete item(id): "))
+                    Delete.run(conn, id_, cMonth, nMonth, table)
+                elif choose == 5:
+                    end = False
+                else:
+                    print("Input error")
+        elif check == 2:
+            cyear = int(input("Which year: "))
+            cmonth = int(input("Which month: "))
+            cMonth, nMonth = sp.Tools.gen_timestamp(cyear, cmonth)
+            end = True
+            while end == True:
+                print("===== {1} list (Month: {0}) =====".format(str(cMonth)[0:7], table.capitalize()))
+                Show.ch_monthly(conn, check, cMonth, nMonth, table)
+                print("--------------------------------------------------------------------------------------")
+                print("1. Prev")
+                print("2. Back")
+                print("3. Modify")
+                print("4. Delete")
+                print("5. Quit")
+                choose = int(input("Choose function: "))
+                if choose == 1:
+                    cmonth -= 1
+                    if cmonth == 0:
+                        cmonth = 12
+                        cyear -= 1
+                    cMonth, nMonth = sp.Tools.gen_timestamp(cyear, cmonth)
+                elif choose == 2:
+                    cmonth += 1
+                    if cmonth == 13:
+                        cmonth = 1
+                        cyear += 1
+                    cMonth, nMonth = sp.Tools.gen_timestamp(cyear, cmonth)
+                elif choose == 3:
+                    id_ = int(input("Modify item(id): "))
+                    Modify.run(conn, id_, cMonth, nMonth, table)
+                elif choose == 4:
+                    id_ = int(input("Delete item(id): "))
+                    Delete.run(conn, id_, cMonth, nMonth, table)
+                elif choose == 5:
+                    end = False
+                else:
+                    print("Input error")
     def adjust(conn, var, table):
         end = True
         while end == True:
@@ -89,7 +164,6 @@ class Modify(object):
                 Acc.adjust(acc_id, conn, table, var[3])
                 print("Recorded!\n")
                 end = False
-            
             else:
                 print("Input error")
 

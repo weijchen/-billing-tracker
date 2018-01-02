@@ -2,7 +2,7 @@
 '''
 Author: Jimmy Chen
 PN: Billing Tracker, Created Dec. 2017
-Ver: 1.4 (finish modify modules)
+Ver: 1.5 (finish all modules, wait for further optimization)
 Link:
 Todo: 
 ''' 
@@ -15,83 +15,14 @@ from income import *
 from expense import *
 from show import *
 from account import *
-from snippets import *
+import snippets as sp
 from modify import *
 # --------------------------------------------------- init settings
-# --------------------------------------------------- Functions
-# class Modify(object):
-#     """docstring for Modify"""
-#     def __init__(self, arg):
-#         super(Modify, self).__init__()
-#         self.arg = arg
-#     def income():
-#         cur = conn.cursor()
-        
-class Display(object):
-    """docstring for Display"""
-    def __init__(self, arg):
-        super(Display, self).__init__()
-        self.arg = arg
-    def main():
-        print("-------------------")
-        print("| Save more Money!|")
-        print("-------------------")
-        print("1. Enter data")
-        print("2. Change data")
-        print("3. Show data")
-        print("4. Create table")
-        print("0. End")
-        print("-------------------")
-    def enter():
-        print("-------------------")
-        print("Main -> Enter data ")
-        print("-------------------")
-        print("1. Enter income")
-        print("2. Enter expense")
-        print("3. Enter account")
-        print("0. End")
-        print("-------------------")
-    def show():
-        print("-------------------")
-        print(" Main -> Show data ")
-        print("-------------------")
-        print("1. Show income")
-        print("2. Show expense")
-        print("3. Show account")
-        print("0. End")
-        print("-------------------")
-    def income():
-        print("-------------------")
-        print("   Show -> Income  ")
-        print("-------------------")
-        print("1. Today")
-        print("2. Specific")
-        print("3. All")
-        print("0. End")
-        print("-------------------")
-    def expense():
-        print("-------------------")
-        print("  Show -> Expense  ")
-        print("-------------------")
-        print("1. Today")
-        print("2. Specific")
-        print("3. All")
-        print("0. End")
-        print("-------------------")
-    def change():
-        print("-------------------")
-        print("   Main -> Change  ")
-        print("-------------------")
-        print("1. Change income")
-        print("2. Change expense")
-        print("3. Change account")
-        print("0. End")
-        print("-------------------")
 # --------------------------------------------------- Control center
 if __name__ == '__main__':
     while True:
         print("")
-        Display.main()
+        sp.Display.main()
         conn = sqlite3.connect('db/money.sqlite')
         choice = int(input("Choose function: "))
         # print("-----------------------------------------")
@@ -101,7 +32,7 @@ if __name__ == '__main__':
         # -- 1. Enter data --
         elif choice == 1:
             while True:
-                Display.enter()
+                sp.Display.enter()
                 choice = int(input("Choose function: "))
                 # print("-----------------------------------------")
                 # -- 1-0. Exit program --
@@ -122,44 +53,44 @@ if __name__ == '__main__':
         # -- 2. Change data --
         elif choice == 2:
             while True:
-                Display.change()
+                sp.Display.change()
+                choice = int(input("Choose function: "))
+                # print("-----------------------------------------")
+                # -- 2-0. Exit program --
+                if choice == 0:
+                    break
+                # -- 2-1. Change income --
+                elif choice == 1:
+                    Modify.main(conn, 'income')
+                    input("Press Enter to continue ...")
+                # -- 2-2. Change expense --
+                elif choice == 2:
+                    Modify.main(conn, 'expense')
+                    input("Press Enter to continue ...")
+                # -- 2-3. Change account --
+                elif choice == 3:
+                    Acc.main(conn)
+                    input("Press Enter to continue ...")
+        # -- 3. Show data --
+        elif choice == 3:
+            while True:
+                sp.Display.show()
                 choice = int(input("Choose function: "))
                 # print("-----------------------------------------")
                 # -- 3-0. Exit program --
                 if choice == 0:
                     break
-                # -- 3-1. Change income --
+                # -- 3-1. Show income --
                 elif choice == 1:
-                    Inc.change(conn)
-                    input("Press Enter to continue ...")
-                # -- 3-2. Change expense --
-                elif choice == 2:
-                    Exp.change(conn)
-                    input("Press Enter to continue ...")
-                # -- 3-3. Change account --
-                elif choice == 3:
-                    Acc.change(conn)
-                    input("Press Enter to continue ...")
-        # -- 3. Show data --
-        elif choice == 3:
-            while True:
-                Display.show()
-                choice = int(input("Choose function: "))
-                # print("-----------------------------------------")
-                # -- 4-0. Exit program --
-                if choice == 0:
-                    break
-                # -- 4-1. Show income --
-                elif choice == 1:
-                    Display.income()
+                    sp.Display.income()
                     check = int(input("Choose function: "))
-                    Show.income(conn, check)
-                # -- 4-2. Show expense --
+                    Show.inc_exp(conn, check, 'income')
+                # -- 3-2. Show expense --
                 elif choice == 2:
-                    Display.expense()
+                    sp.Display.expense()
                     check = int(input("Choose function: "))
-                    Show.expense(conn, check)
-                # -- 4-3. Show account --
+                    Show.inc_exp(conn, check, 'expense')
+                # -- 3-3. Show account --
                 elif choice == 3:
                     Show.account(conn)
                     input("Press Enter to continue ...")

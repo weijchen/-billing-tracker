@@ -10,7 +10,7 @@ import sqlite3
 import time, datetime
 from datetime import timedelta
 import pandas as pd
-from show import *
+import show
 from income import *
 from expense import *
 # --------------------------------------------------- init settings
@@ -20,22 +20,6 @@ class Acc(object):
     def __init__(self, arg):
         super(Acc, self).__init__()
         self.arg = arg
-    def account(conn):
-        cur = conn.cursor()
-        sqlstr = "SELECT id, title, amount, details FROM account;"
-        cur.execute(sqlstr)
-        var = cur.fetchall()
-        if len(var) == 0:
-            print("No account created!")
-            input("Press Enter to continue ...")
-        else:
-            print("===== Account list =====")
-            print("--------------------------------------------------------------------------------------")
-            print("ID | Title | Amount | Details")
-            print("--------------------------------------------------------------------------------------")
-            for idx in range(len(var)):
-                print('{0}\t{1}\t{2}\t{3} '.format(var[idx][0], var[idx][1], var[idx][2], var[idx][3]))
-            print("")
     def delete(conn, id):
         cur = conn.cursor()
         sqlstr = "SELECT * FROM account WHERE id == '{0}'".format(id)
@@ -67,24 +51,28 @@ class Acc(object):
             print("0. Make the change!")
             choose = int(input("Modify which column: "))
             if choose == 1:
-                var[4] = input("Enter account name: ")
-                while (Acc.account_check(str(var[1]), conn) == True):
+                temp_name = input("Enter account name: ")
+                while (Acc.account_check(str(temp_name), conn) == True):
                     print("Title existed!")
-                    var[1] = input("Enter account name: ")
+                    temp_name = input("Enter account name: ")
+                var[3] = temp_name
             elif choose == 2:
-                origin = var[3]
+                origin = int(var[4])
                 new = int(input("Init value: ") or 0)
                 diff = new - origin
+                print(new, origin, diff)
                 if diff >= 0:
                     cat = 'income'
+                    var[5] = str(int(var[5]) + diff)
                 else:
                     cat = 'exp'
-                Acc.adjust(id, conn, cat, abs(diff))
-                var[3] = new
+                    var[5] = str(int(var[5]) + diff)
+                var[4] = str(new)
             elif choose == 3:
-                var[5] = str(input("Details: ") or "None")
+                var[6] = str(input("Details: ") or "None")
             elif choose == 0:
-                sqlstr_update = "UPDATE account SET title = {1}, initial = {2}, details = {3} WHERE id == '{0}';".format(id, var[1], var[3], var[5])
+                cur = conn.cursor()
+                sqlstr_update = "UPDATE account SET title = '{1}', initial = {2}, amount = {3}, details = '{4}' WHERE id == '{0}';".format(id, var[3], var[4], var[5], var[6])
                 cur.execute(sqlstr_update)
                 conn.commit()
                 print("Recorded!\n")
@@ -92,10 +80,10 @@ class Acc(object):
             else:
                 print("Input error")
         conn.commit()
-    def change(conn):
-        Acc.account(conn)
+    def main(conn):
         end = True
         while end == True:
+            show.Show.account(conn)
             print("--------------------------------------------------------------------------------------")
             print("1. Delete")
             print("2. Modify")

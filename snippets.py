@@ -17,6 +17,67 @@ from delete import *
 from modify import *
 # --------------------------------------------------- init settings
 # --------------------------------------------------- Functions
+class Display(object):
+    """docstring for Display"""
+    def __init__(self, arg):
+        super(Display, self).__init__()
+        self.arg = arg
+    def main():
+        print("-------------------")
+        print("| Save more Money!|")
+        print("-------------------")
+        print("1. Enter data")
+        print("2. Change data")
+        print("3. Show data")
+        print("4. Create table")
+        print("0. End")
+        print("-------------------")
+    def enter():
+        print("-------------------")
+        print(" Main -> Enter data")
+        print("-------------------")
+        print("1. Enter income")
+        print("2. Enter expense")
+        print("3. Enter account")
+        print("0. End")
+        print("-------------------")
+    def show():
+        print("-------------------")
+        print(" Main -> Show data ")
+        print("-------------------")
+        print("1. Show income")
+        print("2. Show expense")
+        print("3. Show account")
+        print("0. End")
+        print("-------------------")
+    def income():
+        print("-------------------")
+        print("   Show -> Income  ")
+        print("-------------------")
+        print("1. Today")
+        print("2. Specific")
+        print("3. All")
+        print("0. End")
+        print("-------------------")
+    def expense():
+        print("-------------------")
+        print("  Show -> Expense  ")
+        print("-------------------")
+        print("1. Today")
+        print("2. Specific")
+        print("3. All")
+        print("0. End")
+        print("-------------------")
+    def change():
+        print("-------------------")
+        print("   Main -> Change  ")
+        print("-------------------")
+        print("1. Change income")
+        print("2. Change expense")
+        print("3. Change account")
+        print("0. End")
+        print("-------------------")
+        
 class Tools(object):
     """docstring for Tools"""
     def __init__(self, arg):
@@ -27,8 +88,12 @@ class Tools(object):
             out_1, out_2 = str(datetime.datetime.now()).split(" ")[0], str(datetime.datetime.now()).split(" ")[1]
         else:
             year = str(input("Which year? ")) 
-            month = str(input("Which month? ")) 
-            day = str(input("Which day? "))
+            month = str(input("Which month: "))
+            if len(month) == 1:
+                month = '0'+month
+            day = str(input("Which day: "))
+            if len(day) == 1:
+                day = '0'+day
             time = str(datetime.datetime.now()).split(" ")[1]
 
             out_1 = year+"-"+month+"-"+day
@@ -46,6 +111,21 @@ class Tools(object):
                 return id_
             else:
                 id_ += 1
+    def gen_timestamp(cur_year, cur_month):
+        next_year = cur_year
+        next_month = cur_month + 1
+        if next_month > 12:
+            next_year += 1
+            next_month = 1
+        cur_month = str(cur_month)
+        if len(cur_month) == 1:
+            cur_month = '0'+cur_month
+        next_month = str(next_month)
+        if len(next_month) == 1:
+            next_month = '0'+next_month
+        cMonth = str(cur_year)+'-'+cur_month
+        nMonth = str(next_year)+'-'+next_month
+        return cMonth, nMonth
         
 class Category_inc(object):
     """docstring for Category"""
@@ -59,13 +139,10 @@ class Category_inc(object):
         for idx in range(len(cat)):
             print('{0}. {1} '.format(idx+1, cat[idx]))
         print("----------------------------------------")
-        choose = int(input("Which category? "))
-        print("========================================")
-        print("")
-        while choose < 0 and choose > len(cat):
-            choose = int(input("Which category? "))
-        else:
-            return cat[choose-1]
+        choose = int(input("Main category? "))
+        while choose <= 0 or choose > len(cat):
+            choose = int(input("Error input, re-enter: "))
+        return cat[choose-1]
     def get_sub(main):
         dic = {
             'Salary': {
@@ -84,11 +161,11 @@ class Category_inc(object):
         for key, val in enumerate(dic[main]):
             print('{0}. {1} '.format(key+1, dic[main][val]))
         print("----------------------------------------")
-        choose = str(input("Which item? "))
+        choose = str(input("Sub category? "))
         print("========================================")
         print("")
-        while int(choose) < 0 and int(choose)-1 == len(dic[main]):
-            choose = str(input("Which item? "))
+        while int(choose) <= 0 or int(choose)-1 == len(dic[main]):
+            choose = str(input("Error input, re-enter: "))
         return dic[main][choose]
 class Category_exp(object):
     """docstring for Category_exp"""
