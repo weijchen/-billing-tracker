@@ -23,7 +23,7 @@ if __name__ == '__main__':
     while True:
         print("")
         sp.Display.main()
-        conn = sqlite3.connect('db/money.sqlite')
+        conn = sqlite3.connect('DB of your own'.format(PATH))
         choice = int(input("Choose function: "))
         # print("-----------------------------------------")
         # -- 0. Exit program --
